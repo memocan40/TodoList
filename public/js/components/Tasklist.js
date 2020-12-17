@@ -1,5 +1,5 @@
 /**
- * @module Tasklist
+ * @module TaskList
  */
 
 /**
@@ -9,10 +9,10 @@
  * @property {Array}  _tasks  Task list.
  * @property {Number} _nextId Id to be assigned to the next new task.
  */
-export default class Tasklist {
+export default class TaskList {
   /**
    * @constructor
-   * @description Creates a new Tasklist.
+   * @description Creates a new TaskList.
    */
   constructor() {
     this._tasks = [];
@@ -20,22 +20,43 @@ export default class Tasklist {
   }
 
   /**
+   * @description Returns the id for next new task.
+   *
+   * @returns {Number} Id of next new task.
+   */
+  get NextId() {
+    return this._nextId;
+  }
+
+  /**
+   * @description Returns the list of tasks.
+   *
+   * @returns {Array} List of tasks.
+   */
+  get Tasks() {
+    return this._tasks;
+  }
+
+  /**
    * @description Adds a task to the list.
    *
-   * @param {Task} Task to be added to the list
+   * @param {Task} task Task to be added to the list.
    */
-  addTask(Task) {
-    this._tasks.push(Task);
+  addTask(task) {
+    const newTask = task;
+    newTask.Id = this._nextId;
+    this._tasks.push(newTask);
     this._nextId++;
+    return newTask.Id;
   }
 
   /**
    * @description Removes a task from the list.
    *
-   * @param {Number} id id of the task to be removed
+   * @param {Number} id Id of the task to be removed.
    */
-  removeTask(id) {
-    let index = this._tasks.indexOf(id);
-    this._tasks.splice(id, index);
+  deleteTask(id) {
+    const index = this.Tasks.findIndex(task => task.getId === id);
+    this._tasks.splice(index, 1);
   }
 }

@@ -13,6 +13,8 @@
 
 This project is a classic TODO list, created for a WBS Coding School assignment.
 
+![](img/demo.gif)
+
 In order to get help while changing this README file, you can use this [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/).
 
 ## Organisation
@@ -46,8 +48,12 @@ _Properties_
 _Methods_
 
 - constructor (description)
+- get Id: Number
+- set Id: Number
+- get Description
+- get Finished
 - markAsDone ()
-- undoTask ()
+- undo ()
 
 **Tasklist**
 
@@ -58,9 +64,11 @@ _Properties_
 
 _Methods_
 
-- constructor (Task array)
+- constructor ()
+- get NextId: Number
+- get Tasks: Array
 - addTask (Task)
-- removeTask (id)
+- deleteTask (id)
 
 ### Guidelines
 

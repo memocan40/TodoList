@@ -3,86 +3,103 @@
  */
 
 import {
-  todoList,
-  doneList,
-  btnFinishTaskClass,
-  btnUndoTaskClass,
-  finishedTaskClass,
-  btnFinishTaskClassFA,
-  btnUndoTaskClassFA
+  domTodoList,
+  domDoneList,
+  cssClassTask,
+  cssClassTaskFinished,
+  cssClassTaskDesc,
+  cssClassBtnTask,
+  cssClassBtnFinishTask,
+  cssClassBtnUndoTask,
+  cssClassBtnDelTask,
+  cssClassFaBtnFinishTask,
+  cssClassFaBtnUndoTask,
+  cssClassFaBtnDelTask
 } from './constants.js';
 
 let functions = {
   /**
-   * @description Marks task as done and moves it to finished tasks section
+   * @description Adds task to list
    *
-   * @param {Tasklist}  TODOList object of the application
-   * @param {String}    task     Task oject we want to mark as finished
-   * @param {String}    button   finish button of the task in the DOM
+   * @param {TaskList}  taskList  Task list object in application
+   * @param {Object}    domTask   Task DOM node to be marked as finished
    */
 
-  finishTask: (TODOList, task, button) => {
-    const targetID = parseInt(task.id);
-    const taskArray = TODOList._tasks;
+  addTask: (taskList, task) => {
+    const taskId = taskList.addTask(task);
+
+    const taskHTML = `<div class="${cssClassTask}" id="${taskId}">
+                      <p class="${cssClassTaskDesc}">${task.Description}</p>
+                      <button class="${cssClassBtnTask} ${cssClassBtnFinishTask} fas ${cssClassFaBtnFinishTask}"></button>
+                      <button class="${cssClassBtnTask} ${cssClassBtnDelTask} fas ${cssClassFaBtnDelTask}"></button>
+                    </div>`;
+
+    domTodoList.innerHTML += taskHTML;
+  },
+
+  /**
+   * @description Marks task as done and moves it to finished tasks section
+   *
+   * @param {TaskList}  taskList  Task list object in application
+   * @param {Object}    domTask   Task DOM node to be marked as finished
+   * @param {Object}    domBtn    Finish button in DOM of spedific task
+   */
+
+  finishTask: (taskList, domTask, domBtn) => {
+    const domTaskId = parseInt(domTask.id);
+    const taskArray = taskList.Tasks;
 
     //Changing button icons
-    button.classList.add(btnUndoTaskClassFA);
-    button.classList.remove(btnFinishTaskClassFA);
+    domBtn.classList.add(cssClassFaBtnUndoTask);
+    domBtn.classList.remove(cssClassFaBtnFinishTask);
 
     //Changing button task classes
-    button.classList.add(btnUndoTaskClass);
-    button.classList.remove(btnFinishTaskClass);
+    domBtn.classList.add(cssClassBtnUndoTask);
+    domBtn.classList.remove(cssClassBtnFinishTask);
 
-    task.classList.add(finishedTaskClass);
-    doneList.append(task);
+    domTask.classList.add(cssClassTaskFinished);
+    domDoneList.append(domTask);
 
-    for (let i = 0; i < taskArray.length; i++) {
-      if (taskArray[i]._id === targetID) {
-        taskArray[i].markAsDone();
-      }
-    }
+    taskArray.find(task => task.Id === domTaskId).markAsDone();
   },
 
   /**
    * @description Marks task as not done and moves it to TODO tasks section
    *
-   * @param {Tasklist}  TODOList object of the application
-   * @param {String}    task     Task oject we want to mark as finished
-   * @param {String}    button   finish button of the task in the DOM
+   * @param {TaskList}  taskList  Task list object in application
+   * @param {Object}    domTask   Task DOM node to be marked as finished
+   * @param {Object}    domBtn    Finish button in DOM of specific task
    */
 
-  undoTask: (TODOList, task, button) => {
-    const targetID = parseInt(task.id);
-    const taskArray = TODOList._tasks;
+  undoTask: (taskList, domTask, domBtn) => {
+    const domTaskId = parseInt(domTask.id);
+    const taskArray = taskList.Tasks;
 
     //Changing button icons
-    button.classList.add(btnFinishTaskClassFA);
-    button.classList.remove(btnUndoTaskClassFA);
+    domBtn.classList.add(cssClassFaBtnFinishTask);
+    domBtn.classList.remove(cssClassFaBtnUndoTask);
 
     //Changing button task classes
-    button.classList.add(btnFinishTaskClass);
-    button.classList.remove(btnUndoTaskClass);
+    domBtn.classList.add(cssClassBtnFinishTask);
+    domBtn.classList.remove(cssClassBtnUndoTask);
 
-    task.classList.remove(finishedTaskClass);
-    todoList.append(task);
+    domTask.classList.remove(cssClassTaskFinished);
+    domTodoList.append(domTask);
 
-    for (let i = 0; i < taskArray.length; i++) {
-      if (taskArray[i]._id === targetID) {
-        taskArray[i].undoTask();
-      }
-    }
+    taskArray.find(task => task.Id === domTaskId).undo();
   },
 
   /**
-   * @description Deletes a task from both the task array and the DOM
+   * @description Deletes task from task array and DOM
    *
-   * @param {Tasklist}  TODOList object of the application
-   * @param {String}    task     Task oject we want to mark as finished
+   * @param {TaskList}  taskList  Task list object in application
+   * @param {Object}    domTask   Task DOM node to be marked as finished
    */
 
-  deleteTask: (TODOList, task) => {
-    task.remove();
-    TODOList.removeTask(task);
+  deleteTask: (taskList, domTask) => {
+    const domTaskId = parseInt(domTask.id);
+    taskList.deleteTask(domTaskId);
+    domTask.remove();
   }
 };
 
